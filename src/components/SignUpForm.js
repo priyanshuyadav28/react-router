@@ -4,8 +4,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-function SignUpForm({setIsLoggedIn}) {
-
+function SignUpForm({ setIsLoggedIn }) {
   const navigate = useNavigate();
 
   const [formData, setFormData] = React.useState({
@@ -17,6 +16,8 @@ function SignUpForm({setIsLoggedIn}) {
   });
 
   const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  
   const [accountType, setAccountType] = React.useState("student");
 
   function changeHandler(event) {
@@ -30,15 +31,23 @@ function SignUpForm({setIsLoggedIn}) {
 
   function submitHandler(event) {
     event.preventDefault();
-    if(formData.password !== formData.confirmPassword){
+    if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match");
       return;
     }
 
-    setIsLoggedIn(true); 
+    setIsLoggedIn(true);
     toast.success("Account Created");
-    navigate("/dashboard" );
+      navigate("/dashboard");
+  };
+
+  const finalData = {
+    ...formData, 
+    accountType
   }
+
+  console.log("Printing Final Account Data");
+  console.log(finalData);
 
   return (
     <div>
@@ -121,6 +130,7 @@ function SignUpForm({setIsLoggedIn}) {
 
         {/* Password - confirm password */}
         <div className="flex gap-x-3 mt-3">
+        
           <label className="w-full relative">
             <p className="text-[0.875rem] text-richblack-5 mb-1 leading-[1.375rem]">
               Password <sup className="text-pink-200">*</sup>
@@ -154,7 +164,7 @@ function SignUpForm({setIsLoggedIn}) {
             </p>
             <input
               required
-              type={showPassword ? "text" : "password"}
+              type={showConfirmPassword ? "text" : "password"}
               name="confirmPassword"
               onChange={changeHandler}
               placeholder="Confirm Password"
@@ -164,9 +174,9 @@ function SignUpForm({setIsLoggedIn}) {
 
             <span
               className="absolute right-3 top-[40px] cursor-pointer"
-              onClick={() => setShowPassword((prev) => !prev)}
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
             >
-              {showPassword ? (
+              {showConfirmPassword ? (
                 <AiOutlineEyeInvisible fontSize={24} fill="#AFB2BF" />
               ) : (
                 <AiOutlineEye fontSize={24} fill="#AFB2BF" />
